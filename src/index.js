@@ -1,100 +1,100 @@
-function isLegalRectangle(rectangle){
-	let dimention;
-	for (dimention in rectangle) {
-		// console.log(rectangle[dimention]);
-		if(typeof rectangle[dimention] !== 'number'){
-			return false;
-		}
+function isLegalRectangle (rectangle) {
+
+	if (rectangle.height <= 0 || rectangle.width <= 0) {
+		return false;
 	}
+
 	return true;
-};
+}
 
-export function areIntersected(firstRectangle, secondRectangle){
-	if(isLegalRectangle(firstRectangle) && isLegalRectangle(secondRectangle)){
-		let firstTop = firstRectangle.top;
-		let firstLeft = firstRectangle.left;
-		let firstBottom = firstRectangle.height+firstRectangle.top;
-		let firstRight = firstRectangle.width+firstRectangle.left;
-		let secondTop = secondRectangle.top;
-		let secondLeft = secondRectangle.left;
-		let secondBottom = secondRectangle.height+secondRectangle.top;
-		let secondRight = secondRectangle.width+secondRectangle.left;
+export function areIntersected (firstRectangle, secondRectangle) {
+	let ay = firstRectangle.top;
+	let ax = firstRectangle.left;
+	let ay2 = firstRectangle.height + firstRectangle.top;
+	let ax2 = firstRectangle.width + firstRectangle.left;
+	let by = secondRectangle.top;
+	let bx = secondRectangle.left;
+	let by2 = secondRectangle.height + secondRectangle.top;
+	let bx2 = secondRectangle.width + secondRectangle.left;
 
-		if((firstRight<secondLeft||firstLeft>secondRight)&&(firstBottom<secondTop||firstTop>secondBottom)){
-			return false;
-		}
-		else if(firstTop===secondTop&&firstLeft===secondLeft){
-			return true;
-		} 
-
-
-
-		else if((firstTop<=secondTop&&secondTop<=firstBottom)&&
-			(firstLeft<=secondLeft&&secondLeft<=firstRight)){
-				return true;
-			}
-		else if(firstLeft>secondRight||
-			firstRight>secondLeft||
-			firstTop<secondBottom||
-			firstBottom>secondTop){
-			return false;
-		}
+	if (((ax <= bx && bx < ax2) || (bx <= ax && ax < bx2)) && ((ay <= by && by < ay2) || (by <= ay && ay < by2))) {
 		return true;
-		// if(firstRectangle.top<(secondRectangle.height+secondRectangle.top)||
-		// (firstRectangle.height+firstRectangle.top)>secondRectangle.top){
-		// 	return false;
-		// } else if((firstRectangle.width+firstRectangle.left)<secondRectangle.top||
-		// firstRectangle.top>(secondRectangle.width+secondRectangle.top)){
-		// 	return false;
-		// }
-		// return true;
-		// else if(){
-		// 		return true;
-		// 	};
-		// 	return true;
-
-			// (firstRectangle.top<(secondRectangle.height+secondRectangle.top)||
-			// (firstRectangle.height+firstRectangle.top)>secondRectangle.top||
-			// (firstRectangle.width+firstRectangle.left)<secondRectangle.top||
-			// firstRectangle.top>(secondRectangle.width+secondRectangle.top))
-		// return true;
-		// return 
-		//  a.y < b.y1 ||
-		//  a.y1 > b.y ||
-		//  a.x1 < b.x ||
-		//  a.x > b.x1 
 	}
 
-return false;
-};
-export function filterVisible(maternalRectangle, rectangleArray){
 
-};
+	return false;
+}
 
-let rectangleTest = {
-	left: 0,
-	top: 0,
-	width: 20,
-	height: 20
-};
-let rectangleTest2 = {
-		left: 10,
-		top: 10,
-		width: 25,
-		height: 25	 
-};
+function areIntersectsParental (firstRectangle, secondRectangle) {
+	let ay = firstRectangle.top;
+	let ax = firstRectangle.left;
+	let ay2 = firstRectangle.height + firstRectangle.top;
+	let ax2 = firstRectangle.width + firstRectangle.left;
+	let by = secondRectangle.top;
+	let bx = secondRectangle.left;
+	let by2 = secondRectangle.height + secondRectangle.top;
+	let bx2 = secondRectangle.width + secondRectangle.left;
 
-// console.log(areIntersected(rectangleTest, rectangleTest2));
+	if (((ax <= bx && bx < ax2)) && ((ay <= by && by < ay2))) {
+		return true;
+	}
+	return false;
+}
 
-// isLegalRectangle(rectangleTest);
-// let prop;
-// for(prop in rectangleTest){
-// 	console.log(rectangleTest[prop]);
+export function filterVisible (maternalRectangle, rectangleArray) {
+	let resultRectangleArray = [];
+
+	if (isLegalRectangle(maternalRectangle)) {
+		resultRectangleArray = rectangleArray
+		.filter(rectangle => (areIntersectsParental(maternalRectangle, rectangle))
+		&& isLegalRectangle(rectangle));
+
+		return resultRectangleArray;
+	}
+
+	return resultRectangleArray;
+}
+
+// console.log(filterVisible({
+// 	left: 0, top: 0,
+// 	width: 20, height: 20
+//  }, [
+// 	{
+// 	   left: 10, top: 10,
+// 	   width: 25,  height: 25
+// 	},
+// 	{
+// 	   left: 15, top: 10,
+// 	   width: 20,  height: 20
+// 	},
+// 	{
+// 	   left: 10, top: 10,
+// 	   width: 0,  height: 25
+// 	},
+// 	{
+// 	   left: 100, top: 10,
+// 	   width: 5,  height: 5
+// 	}
+//  ]));
+
+
+// We can use the same code to check if the rectangle is legal (has not zero dimention or value not a number)
+
+// export function areIntersected (firstRectangle, secondRectangle) {
+// 	if (isLegalRectangle(firstRectangle) && isLegalRectangle(secondRectangle)) {
+// 		let ay = firstRectangle.top;
+// 		let ax = firstRectangle.left;
+// 		let ay2 = firstRectangle.height + firstRectangle.top;
+// 		let ax2 = firstRectangle.width + firstRectangle.left;
+// 		let by = secondRectangle.top;
+// 		let bx = secondRectangle.left;
+// 		let by2 = secondRectangle.height + secondRectangle.top;
+// 		let bx2 = secondRectangle.width + secondRectangle.left;
+
+// 		if (((ax <= bx && bx < ax2) || (bx <= ax && ax < bx2)) && ((ay <= by && by < ay2) || (by <= ay && ay < by2))) {
+// 			return true;
+// 		}
+// 	}
+
+// 	return false;
 // }
-
-// isLegalRectangle({
-// 	left: 0,
-// 	top: 0,
-// 	width: -20,
-// 	height: 20
-//  });
